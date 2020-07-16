@@ -8,6 +8,8 @@ config.read('dwh.cfg')
 ARN = config.get("IAM_ROLE","ARN")
 LOG_DATA = config.get("S3","LOG_DATA")
 SONG_DATA = config.get("S3","SONG_DATA")
+LOG_JSONPATH = config.get("S3", "LOG_JSONPATH")
+
 # DROP TABLES
 
 staging_events_table_drop = "DROP TABLE IF EXISTS staging_events"
@@ -136,9 +138,9 @@ staging_events_copy = ("""
 
 copy staging_events from {}
     iam_role {}
-    format as json 'auto' region 'us-west-2';
+    format as json {} region 'us-west-2';
 
-""").format(LOG_DATA,ARN)
+""").format(LOG_DATA,ARN,LOG_JSONPATH)
 
 staging_songs_copy = ("""
 copy staging_songs from {}
